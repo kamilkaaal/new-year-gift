@@ -14,24 +14,34 @@
       align-items: center;
       justify-content: center;
       min-height: 100vh;
-      text-align: center;
       padding: 20px;
     }
     .card {
-      background: rgba(255,255,255,0.1);
-      border-radius: 20px;
-      padding: 25px;
-      max-width: 360px;
+      background: rgba(255,255,255,0.12);
+      border-radius: 24px;
+      padding: 28px;
+      max-width: 380px;
       width: 100%;
-      box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+      text-align: center;
+      box-shadow: 0 20px 40px rgba(0,0,0,0.35);
+      animation: fadeIn 0.6s ease;
     }
     h1 {
       font-size: 22px;
-      margin-bottom: 15px;
+      margin-bottom: 14px;
     }
     p {
       font-size: 16px;
+      line-height: 1.5;
       margin-bottom: 20px;
+    }
+    input {
+      width: 100%;
+      padding: 14px;
+      font-size: 16px;
+      border-radius: 14px;
+      border: none;
+      margin-bottom: 16px;
     }
     button {
       width: 100%;
@@ -39,7 +49,7 @@
       margin: 8px 0;
       font-size: 16px;
       border: none;
-      border-radius: 14px;
+      border-radius: 16px;
       cursor: pointer;
       background: #ffffff;
       color: #203a43;
@@ -48,50 +58,85 @@
     button:active {
       transform: scale(0.97);
     }
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
   </style>
 </head>
 <body>
 
-<div class="card" id="game">
-  <h1>🎄 Небольшой новогодний выбор</h1>
-  <p>Выбирай, что больше по душе ✨</p>
-  <button onclick="next(1)">☕ Горячий какао</button>
-  <button onclick="next(1)">🍷 Глинтвейн</button>
-</div>
+<div class="card" id="game"></div>
 
 <script>
-let step = 1;
+let name = "";
+let drink = "";
+let mood = "";
 
-function next() {
-  const game = document.getElementById("game");
-  step++;
+const game = document.getElementById("game");
 
-  if (step === 2) {
-    game.innerHTML = `
-      <h1>❄️ Вечер лучше провести…</h1>
-      <button onclick="next()">📺 Дома под пледом</button>
-      <button onclick="next()">🚶‍♂️ На прогулке</button>
-    `;
-  }
+start();
 
-  else if (step === 3) {
-    game.innerHTML = `
-      <h1>🎁 Последний выбор</h1>
-      <button onclick="next()">🎄 Сюрприз</button>
-      <button onclick="next()">✨ Чудо</button>
-    `;
-  }
+function start() {
+  game.innerHTML = `
+    <h1>🎄 Небольшой новогодний выбор</h1>
+    <p>Как тебя зовут?</p>
+    <input type="text" placeholder="Введи имя" id="nameInput">
+    <button onclick="saveName()">Начать ✨</button>
+  `;
+}
 
-  else {
-    game.innerHTML = `
-      <h1>🎉 С Новым годом!</h1>
-      <p>
-        Пусть в этом году будет больше тепла,<br>
-        улыбок и маленьких чудес ✨<br><br>
-        Спасибо, что ты есть 💛
-      </p>
-    `;
-  }
+function saveName() {
+  const input = document.getElementById("nameInput").value.trim();
+  if (!input) return;
+  name = input;
+  chooseDrink();
+}
+
+function chooseDrink() {
+  game.innerHTML = `
+    <h1>${name}, выбери напиток ☕</h1>
+    <button onclick="setDrink('какао')">☕ Горячий какао</button>
+    <button onclick="setDrink('глинтвейн')">🍷 Глинтвейн</button>
+  `;
+}
+
+function setDrink(value) {
+  drink = value;
+  chooseMood();
+}
+
+function chooseMood() {
+  game.innerHTML = `
+    <h1>❄️ Как проходит идеальный вечер?</h1>
+    <button onclick="setMood('дома под пледом')">🏠 Дома под пледом</button>
+    <button onclick="setMood('на прогулке')">🚶‍♂️ На прогулке</button>
+  `;
+}
+
+function setMood(value) {
+  mood = value;
+  showFinal();
+}
+
+function showFinal() {
+  game.innerHTML = `
+    <h1>🎉 ${name}, с Новым годом!</h1>
+    <p>
+      Представь этот вечер: ты ${mood},  
+      в руках ${drink},  
+      а вокруг — спокойствие, тепло и ощущение,
+      что всё складывается именно так, как нужно ✨
+      <br><br>
+      Пусть в новом году будет больше таких моментов —
+      искренних, уютных и по-настоящему твоих.
+      Пусть желания не боятся сбываться,
+      а рядом всегда будут люди,
+      с которыми хорошо даже молчать 💛
+      <br><br>
+      С праздником 🎄
+    </p>
+  `;
 }
 </script>
 
